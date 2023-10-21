@@ -1,4 +1,4 @@
-package com.HomestayManagementSystem;
+package com.homestay;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

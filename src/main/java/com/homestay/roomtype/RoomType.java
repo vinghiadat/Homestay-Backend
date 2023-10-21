@@ -32,6 +32,7 @@ public class RoomType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotEmpty(message = "Name cannot be empty")
+    @Column(unique = true)
     private String name;
     @NotNull(message = "NumberOfAdult cannot be null")
     private Integer numberOfAdult;

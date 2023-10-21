@@ -1,17 +1,69 @@
-package com.HomestayManagementSystem;
+package com.homestay;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.HomestayManagementSystem.exception.UsernameAlreadyExistsException;
-import com.HomestayManagementSystem.message.ErrorMessage;
+import com.homestay.exception.AlreadyExistsException;
+import com.homestay.exception.InvalidValueException;
+import com.homestay.exception.NotFoundException;
+import com.homestay.exception.room.RoomNotEnabledException;
+import com.homestay.exception.roomreservation.NotSuitableForGender;
+import com.homestay.message.ErrorMessage;
 
 @RestControllerAdvice
 public class CustomHandleException {
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<ErrorMessage> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatus.BAD_REQUEST));
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorMessage> handleUsernameAlreadyExistsException(AlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatusCode.valueOf(400).value()));
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        List<String> details = ex.getBindingResult().getAllErrors().stream()
+                .map(error -> error.getDefaultMessage())
+                .collect(Collectors.toList());
+        ErrorMessage errorMessage = new ErrorMessage("Validation failed", details, HttpStatusCode.valueOf(400).value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorMessage> handleBadCredentialsException(BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(ex.getMessage(),HttpStatusCode.valueOf(401).value()));
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatusCode.valueOf(400).value()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatusCode.valueOf(400).value()));
+    }
+
+    @ExceptionHandler(InvalidValueException.class)
+    public ResponseEntity<ErrorMessage> handleInvalidValueException(InvalidValueException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatusCode.valueOf(400).value()));
+    }
+    
+    @ExceptionHandler(RoomNotEnabledException.class)
+    public ResponseEntity<ErrorMessage> handleRoomNotEnabledException(RoomNotEnabledException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatusCode.valueOf(400).value()));
+    }
+
+    @ExceptionHandler(NotSuitableForGender.class)
+    public ResponseEntity<ErrorMessage> handleNotSuitableForGender(NotSuitableForGender ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage(ex.getMessage(), HttpStatusCode.valueOf(400).value()));
+    }
+
 }
