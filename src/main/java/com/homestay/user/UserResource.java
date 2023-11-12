@@ -21,7 +21,7 @@ import com.homestay.message.SuccessMessage;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:4401"})
 @RequestMapping("api/v1/user")
 public class UserResource {
     
@@ -47,5 +47,9 @@ public class UserResource {
     @GetMapping("role/{username}")
     public ResponseEntity<List<String>> getRoleByUsername(@PathVariable("username") String username) {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.getRoleByUsername(username));
+    }
+    @GetMapping("username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByUsername(username));
     }
 }

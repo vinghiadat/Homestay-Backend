@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.homestay.config.JwtGenerator;
 import com.homestay.exception.AlreadyExistsException;
+import com.homestay.exception.NotFoundException;
 import com.homestay.role.Role;
 import com.homestay.role.RoleRepository;
 
@@ -43,7 +44,11 @@ public class UserService {
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
     }
-
+    public User getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new NotFoundException("Không tồn tại user này"));
+        return user;
+    }
     @Transactional //Đánh dấu là 1 giao dịch, nếu có vấn đề nó rollback hết
     public void register(User user) {
 

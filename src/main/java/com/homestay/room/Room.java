@@ -29,7 +29,6 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer numberRoom;
-    private Integer isBooked = 0; 
     private Boolean enable = true;
     @JsonIgnore
     @ManyToOne // Một Room thuộc về một RoomType

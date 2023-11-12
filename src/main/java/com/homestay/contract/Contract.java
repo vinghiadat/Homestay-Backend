@@ -44,6 +44,6 @@ public class Contract {
     @ManyToOne(optional = true)
     @JoinColumn(name = "admin_id")
     private User admin;
-    private Boolean status = false;
-    private String notifyFromAdmin = new String();
+    private Integer status = 0;
+    private String note = new String();
 }
