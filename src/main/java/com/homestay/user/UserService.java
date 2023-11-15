@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.homestay.config.JwtGenerator;
 import com.homestay.exception.AlreadyExistsException;
+import com.homestay.exception.InvalidValueException;
 import com.homestay.exception.NotFoundException;
 import com.homestay.role.Role;
 import com.homestay.role.RoleRepository;
@@ -88,6 +89,22 @@ public class UserService {
         }else { 
             return userRepository.findRoleNamesByUsername(username);
         }
+    }
+    @Transactional
+    public void changePassword(String username, String oldPassword, String newPassword) {
+        User existingUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
+
+        // Check if the old password matches
+        if (!passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
+            throw new InvalidValueException("Mật khẩu cũ không đúng");
+        }
+
+        // Set and encode the new password
+        existingUser.setPassword(passwordEncoder.encode(newPassword));
+
+        // Save the updated user with the new password
+        userRepository.save(existingUser);
     }
 
 }

@@ -51,6 +51,8 @@ public class User {
     private Integer gender;
     @NotNull(message = "Ngày sinh không được null")
     private LocalDate birthday;
+    @NotNull(message = "Địa chỉ không được null")
+    private String address;
     
 
 

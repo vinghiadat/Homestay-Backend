@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,5 +52,17 @@ public class UserResource {
     @GetMapping("username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByUsername(username));
+    }
+    
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getUserByUsernames(@PathVariable("username") String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.getUserByUsername(username));
+    }
+    @PutMapping("change-password/{username}")
+    public ResponseEntity<SuccessMessage> changePassword(
+            @PathVariable("username") String username,
+            @RequestBody ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(username, changePasswordRequest.getOldPassword(), changePasswordRequest.getNewPassword());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

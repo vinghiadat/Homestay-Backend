@@ -19,7 +19,13 @@ public class RoomService {
         }
         throw new NotFoundException("Phòng không tồn tại với id + "+id);
     }
-
+    
+    public void updateRoom(Integer id, Room room) {
+        Room r = roomRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Không tồn tại phòng với id: " + id));
+        r.setEnable(room.getEnable());
+        roomRepository.save(r);
+    }
     public List<Room> findByRoomType_Id(Integer id) {
         if(roomRepository.findByRoomType_Id(id).isPresent()) {
             return roomRepository.findByRoomType_Id(id).get();

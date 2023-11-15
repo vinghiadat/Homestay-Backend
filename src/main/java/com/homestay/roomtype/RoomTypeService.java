@@ -8,12 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.homestay.exception.NotFoundException;
+
+import jakarta.transaction.Transactional;
 @Service
 public class RoomTypeService {
     
     @Autowired
     private RoomTypeRepository roomTypeRepository;
-    
+    @Transactional
+    public void updateRoomType(Integer id, RoomType roomType) {
+        RoomType r = roomTypeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy loại phòng này"));
+        r.setEnable(roomType.getEnable());
+        roomTypeRepository.save(r);
+    }
     private RoomTypeResponseDTO convertRoomTypeToResponseDTO(RoomType roomType) {
         RoomTypeResponseDTO roomTypeResponseDTO = new RoomTypeResponseDTO();
         roomTypeResponseDTO.setId(roomType.getId());
@@ -22,6 +30,7 @@ public class RoomTypeService {
         roomTypeResponseDTO.setNumberOfChild(roomType.getNumberOfChild());
         roomTypeResponseDTO.setBedType(roomType.getBedType());
         roomTypeResponseDTO.setPrice(roomType.getPrice());
+        roomTypeResponseDTO.setEnable(roomType.getEnable());
         roomTypeResponseDTO.setIsFull(roomType.getIsFull());
         roomTypeResponseDTO.setCreatedDate(roomType.getCreatedDate());
         roomTypeResponseDTO.setUpdatedDate(roomType.getUpdatedDate());
