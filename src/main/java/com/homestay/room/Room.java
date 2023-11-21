@@ -37,7 +37,4 @@ public class Room {
     @JsonIgnore
     @OneToMany(mappedBy = "room")
     private List<RoomReservation> roomReservations;
-    @JsonIgnore
-    @OneToMany(mappedBy = "room")
-    private List<RoomFeedback> feedbacks;
 }

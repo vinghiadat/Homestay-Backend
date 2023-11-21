@@ -1,5 +1,6 @@
 package com.homestay.roomtype;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.homestay.image.ImageService;
+import com.homestay.message.SuccessMessage;
 
 import jakarta.validation.Valid;
 
@@ -31,6 +33,20 @@ public class RoomTypeResource {
     @Autowired
     public RoomTypeResource(RoomTypeService roomTypeService, ImageService imageService) {
         this.roomTypeService = roomTypeService;
+    }
+    @PostMapping("add")
+    public ResponseEntity<?> addRoomTypeWithImages(@RequestParam("images") List<MultipartFile> imageFiles,
+                                                 @RequestParam("name") String name,
+                                                 @RequestParam("numberOfAdult") Integer numberOfAdult,
+                                                 @RequestParam("numberOfChild") Integer numberOfChild,
+                                                 @RequestParam("bedType") String bedType,
+                                                 @RequestParam("price") Float price) throws IOException {
+
+        // Call the service method to add RoomType with images
+        RoomType savedRoomType = roomTypeService.addRoomTypeWithImages(imageFiles, name,numberOfAdult,numberOfChild,bedType,price);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new SuccessMessage("Phòng đã được thêm vào thành công", HttpStatus.CREATED.value()));
     }
     
     @GetMapping()

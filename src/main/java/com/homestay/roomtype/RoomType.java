@@ -19,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity // Tạo bảng trong CSDL
+@Builder
 public class RoomType {
     
     @Id
@@ -42,7 +44,6 @@ public class RoomType {
     private String bedType;
     @NotNull(message = "Price cannot be empty")
     private Float price;
-    private Boolean isFull = false;
     private Boolean enable = true;
     private LocalDate createdDate = LocalDate.now();
     private LocalDate updatedDate = LocalDate.now();

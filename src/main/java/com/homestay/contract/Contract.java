@@ -1,8 +1,6 @@
 package com.homestay.contract;
 
 import java.time.LocalDate;
-
-import com.homestay.admin.Admin;
 import com.homestay.room.Room;
 import com.homestay.user.User;
 

@@ -71,6 +71,11 @@ public class RegisterServiceService {
             }
         return false;
     }
+    public void deleteById(Integer id) {
+        RegisterService registerService = registerServiceRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException("Không tìm thấy đơn đăng ký dịch vụ này"));
+        registerServiceRepository.deleteById(id);
+    }
     @Transactional
     public void registerService(RegisterService registerService) {
         User customer = userRepository.findById(registerService.getCustomer().getId())
